@@ -30,6 +30,7 @@
 #include "DespeckleLevel.h"
 #include "Dpi.h"
 #include "ImageViewTab.h"
+#include "FileParams.h"
 #include <set>
 
 namespace dewarping
@@ -122,6 +123,10 @@ private:
 	void updateColorsDisplay();
 
 	void updateDewarpingDisplay();
+
+	void fileFormatChanged(int idx);
+
+	void updateFileFormat();
 	
 	IntrusivePtr<Settings> m_ptrSettings;
 	PageSelectionAccessor m_pageSelectionAccessor;
@@ -131,6 +136,7 @@ private:
 	DepthPerception m_depthPerception;
 	DewarpingMode m_dewarpingMode;
 	DespeckleLevel m_despeckleLevel;
+	FileParams m_fileParams;
 	ImageViewTab m_lastTab;
 	int m_ignoreThresholdChanges;
 };

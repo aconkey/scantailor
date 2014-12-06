@@ -64,6 +64,9 @@ OptionsWidget::OptionsWidget(
 	colorModeSelector->addItem(tr("Color / Grayscale"), ColorParams::COLOR_GRAYSCALE);
 	colorModeSelector->addItem(tr("Mixed"), ColorParams::MIXED);
 	
+	fileFormatSelector->addItem(tr("TIFF"), FileParams::FILE_TIFF);
+	fileFormatSelector->addItem(tr("PDF"), FileParams::FILE_PDF);
+
 	darkerThresholdLink->setText(
 		Utils::richTextForLink(darkerThresholdLink->text())
 	);
@@ -75,6 +78,7 @@ OptionsWidget::OptionsWidget(
 	updateDpiDisplay();
 	updateColorsDisplay();
 	updateDewarpingDisplay();
+	updateFileFormat();
 	
 	connect(
 		changeDpiButton, SIGNAL(clicked()),
@@ -147,12 +151,14 @@ OptionsWidget::OptionsWidget(
 		applyDespeckleButton, SIGNAL(clicked()),
 		this, SLOT(applyDespeckleButtonClicked())
 	);
-
 	connect(
 		depthPerceptionSlider, SIGNAL(valueChanged(int)),
 		this, SLOT(depthPerceptionChangedSlot(int))
 	);
-	
+	connect(
+		fileFormatSelector, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(fileFormatChanged(int))
+	);
 	thresholdSlider->setMinimum(-50);
 	thresholdSlider->setMaximum(50);
 	thresholLabel->setText(QString::number(thresholdSlider->value()));
@@ -172,9 +178,11 @@ OptionsWidget::preUpdateUI(PageId const& page_id)
 	m_dewarpingMode = params.dewarpingMode();
 	m_depthPerception = params.depthPerception();
 	m_despeckleLevel = params.despeckleLevel();
+	m_fileParams = params.fileParams();
 	updateDpiDisplay();
 	updateColorsDisplay();
 	updateDewarpingDisplay();
+	updateFileFormat();
 }
 
 void
@@ -671,5 +679,38 @@ OptionsWidget::updateDewarpingDisplay()
 	depthPerceptionSlider->setValue(qRound(m_depthPerception.value() * 10));
 	depthPerceptionSlider->blockSignals(false);
 }
+
+void
+OptionsWidget::fileFormatChanged(int idx)
+{
+	int const format = fileFormatSelector->itemData(idx).toInt();
+	m_fileParams.setFileFormat((FileParams::FileFormat)format);
+	m_ptrSettings->setFileParams(m_fileParams);
+	updateFileFormat();
+	emit reloadRequested();
+}
+
+void 
+OptionsWidget::updateFileFormat()
+{
+	fileFormatSelector->blockSignals(true);
+	
+	FileParams::FileFormat const file_format = m_fileParams.fileFormat();
+	int const file_format_idx = fileFormatSelector->findData(file_format);
+	fileFormatSelector->setCurrentIndex(file_format_idx);
+	
+	switch (file_format) 
+	{
+		case FileParams::FILE_TIFF:
+			
+			break;
+		case FileParams::FILE_PDF:
+		
+			break;
+	}
+	
+	fileFormatSelector->blockSignals(false);
+}
+
 
 } // namespace output

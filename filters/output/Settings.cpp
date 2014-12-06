@@ -208,6 +208,15 @@ Settings::setDespeckleLevel(PageId const& page_id, DespeckleLevel level)
 	}
 }
 
+void 
+Settings::setFileParams(FileParams const& prms)
+{
+	QMutexLocker const locker(&m_mutex);
+
+	Params params;
+	params.setFileParams(prms);
+}
+
 std::auto_ptr<OutputParams>
 Settings::getOutputParams(PageId const& page_id) const
 {

@@ -30,6 +30,7 @@
 #include "DespeckleLevel.h"
 #include "ZoneSet.h"
 #include "PropertySet.h"
+#include "FileParams.h"
 #include <QMutex>
 #include <map>
 #include <memory>
@@ -68,6 +69,8 @@ public:
 	void setDepthPerception(PageId const& page_id, DepthPerception const& depth_perception);
 
 	void setDespeckleLevel(PageId const& page_id, DespeckleLevel level);
+
+	void setFileParams(FileParams const& params);
 	
 	std::auto_ptr<OutputParams> getOutputParams(PageId const& page_id) const;
 	

@@ -25,6 +25,7 @@
 #include "dewarping/DistortionModel.h"
 #include "DepthPerception.h"
 #include "DespeckleLevel.h"
+#include "FileParams.h"
 
 class QDomDocument;
 class QDomElement;
@@ -66,17 +67,27 @@ public:
 	void setDespeckleLevel(DespeckleLevel level) { m_despeckleLevel = level; }
 	
 	QDomElement toXml(QDomDocument& doc, QString const& name) const;
+
+	FileParams const& fileParams() const { return m_fileParams; }
+
+	void setFileParams(FileParams const& params) { m_fileParams = params; }
+
 private:
 	static ColorParams::ColorMode parseColorMode(QString const& str);
 	
 	static QString formatColorMode(ColorParams::ColorMode mode);
 	
+	static FileParams::FileFormat parseFileFormat(QString const& str);
+
+	static QString formatFileFormat(FileParams::FileFormat format);
+
 	Dpi m_dpi;
 	ColorParams m_colorParams;
 	dewarping::DistortionModel m_distortionModel;
 	DepthPerception m_depthPerception;
 	DewarpingMode m_dewarpingMode;
 	DespeckleLevel m_despeckleLevel;
+	FileParams m_fileParams;
 };
 
 } // namespace output

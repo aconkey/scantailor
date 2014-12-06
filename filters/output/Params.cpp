@@ -52,6 +52,8 @@ Params::Params(QDomElement const& el)
 	m_colorParams.setBlackWhiteOptions(
 		BlackWhiteOptions(cp.namedItem("bw").toElement())
 	);
+	QDomElement const fp(el.namedItem("file-params").toElement());
+	m_fileParams.setFileFormat(parseFileFormat(fp.attribute("fileFormat")));
 }
 
 QDomElement
@@ -78,6 +80,12 @@ Params::toXml(QDomDocument& doc, QString const& name) const
 		)
 	);
 	cp.appendChild(m_colorParams.blackWhiteOptions().toXml(doc, "bw"));
+
+	QDomElement fp(doc.createElement("file-params"));
+	fp.setAttribute(
+		"fileFormat",
+		formatFileFormat(m_fileParams.fileFormat())
+	);
 	
 	el.appendChild(cp);
 	
@@ -114,6 +122,33 @@ Params::formatColorMode(ColorParams::ColorMode const mode)
 			break;
 		case ColorParams::MIXED:
 			str = "mixed";
+			break;
+	}
+	return QString::fromAscii(str);
+}
+
+FileParams::FileFormat
+Params::parseFileFormat(QString const& str)
+{
+	if (str == "tiff") {
+		return FileParams::FILE_TIFF;
+	} else if (str == "pdf") {
+		return FileParams::FILE_PDF;
+	} else {
+		return FileParams::FILE_TIFF;
+	}
+}
+
+QString
+Params::formatFileFormat(FileParams::FileFormat const format)
+{
+	char const* str = "";
+	switch (format) {
+		case FileParams::FILE_TIFF:
+			str = "tiff";
+			break;
+		case FileParams::FILE_PDF:
+			str = "pdf";
 			break;
 	}
 	return QString::fromAscii(str);

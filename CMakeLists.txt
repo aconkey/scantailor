@@ -168,6 +168,12 @@ ENDIF()
 
 INCLUDE_DIRECTORIES("${JPEG_INCLUDE_DIR}")
 
+FIND_PACKAGE(ImageMagick COMPONENTS Magick++)
+
+INCLUDE_DIRECTORIES(${ImageMagick_INCLUDE_DIRS})
+
+#TARGET_LINK_LIBRARIES(main ${ImageMagick_LIBRARIES})
+
 FIND_LIBRARY(
 	JPEG_LIBRARY NAMES jpeg libjpeg.lib
 	PATHS /usr/local/lib /usr/lib
@@ -511,6 +517,7 @@ SET(
 	PageRange.cpp PageRange.h
 	SelectedPage.cpp SelectedPage.h
 	Utils.cpp Utils.h
+	PdfGenerator.cpp PdfGenerator.h
 	PageView.h
 	AutoManualMode.h
 	AbstractCommand.h
